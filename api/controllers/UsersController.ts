@@ -58,6 +58,21 @@ const UsersController = {
                 msg: error
             })
         }
+    },
+
+    search: async (req: Request, res: Response) => {
+        try{
+            checkKeys(["TipoDocumento", "Documento"], req.params);
+            const data = req.params;
+            res.status(200).send(await UsersService.search(data));
+
+        } catch (error) {
+            console.log(error.stack && error.stack || error);
+            res.status(500).send({
+                error: true,
+                msg: error
+            })
+        }
     }
 }
 

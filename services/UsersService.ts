@@ -37,6 +37,33 @@ const UsersService = {
     delete: async (id: string) =>{
         console.log("Borrando datos");
         return await User.deleteOne({ _id: id });
+    },
+
+    search: async (data: any) =>{
+        console.log("Buscando datos");
+        const users = await User.find({});
+        var existe = false;
+        var type = '';
+        Object.keys(users).forEach(i => {
+            const user = users[i]
+            if(user.TipoDocumento == data.TipoDocumento && user.Documento == data.Documento){
+                existe = true;
+                type = user.Tipo;
+            }
+        });
+        if(existe){
+            const msg = {
+                isRegistered: true,
+                status: type
+            }
+            return msg;
+        }
+        else{
+            const msg = {
+                isRegistered: false
+            }
+            return  msg;
+        }
     }
 }
 
