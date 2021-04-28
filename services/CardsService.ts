@@ -18,7 +18,11 @@ const CardsService = {
             data.Numero = Math.round(Math.random()*10000)
             const card = new Card(data);
             card.save();
-            return card;
+            const message = {
+                status: 1,
+                numero: data.Numero
+            }
+            return message;
         }
         else {
             const message = {
