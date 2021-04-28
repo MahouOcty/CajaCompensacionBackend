@@ -5,7 +5,6 @@ const usersRouter = Router();
 
 usersRouter.get("/", UsersController.getAll);
 
-
 usersRouter.post("/", UsersController.create);
 
 usersRouter.put("/", UsersController.update);

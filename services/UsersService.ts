@@ -14,47 +14,71 @@ const UsersService = {
         const salario = userdata.SalarioMensual;
         const salarioMinimo = 908526;
 
-        if(salario < 2*salarioMinimo){
-            userdata.Tipo = 'A'
-        } else if (salario > 6*salarioMinimo){
-            userdata.Tipo = 'C'
-        } else {
-            userdata.Tipo = 'B'
-        }
+        const users = await User.find({TipoDocumento: userdata.TipoDocumento, Documento: userdata.Documento});
+        var existe = false;
 
-        const user = new User(userdata);
-        user.save();
-        return await user;
+        if (users[0] == undefined){
+            if(salario < 2*salarioMinimo){
+                userdata.Tipo = 'A'
+            } else if (salario > 6*salarioMinimo){
+                userdata.Tipo = 'C'
+            } else {
+                userdata.Tipo = 'B'
+            }
+    
+            const user = new User(userdata);
+            user.save();
+            const msg = {
+                status: 1,
+                message: "El usuario se ha inscrito correctamente"
+            }
+            return  msg;
+        } else {
+            const msg = {
+                status: 0,
+                message: "Este usuario ya se encuentra inscrito en la base de datos"
+            }
+            return msg
+        }
+        
+        
     },
 
     update: async (data: any) =>{
         console.log("Actualizando datos");
-        const id = data.id;
-        delete data.id;
-        return await User.where({_id: id}).update(data);
+        const TipoDocumento = data.TipoDocumento;
+        const Documento = data.Documento;
+        delete data.id, data.Documento;
+        const salario = data.SalarioMensual;
+        const salarioMinimo = 908526;
+
+        if(salario != undefined){
+            if(salario < 2*salarioMinimo){
+                data.Tipo = 'A'
+            } else if (salario > 6*salarioMinimo){
+                data.Tipo = 'C'
+            } else {
+                data.Tipo = 'B'
+            }
+        }
+
+        return await User.where({TipoDocumento: TipoDocumento, Documento: Documento}).update(data);
     },
 
-    delete: async (id: string) =>{
+    delete: async (data: any) =>{
         console.log("Borrando datos");
-        return await User.deleteOne({ _id: id });
+
+        return await User.findOneAndDelete({ TipoDocumento: data.TipoDocumento,  Documento: data.Documento });
     },
 
     search: async (data: any) =>{
         console.log("Buscando datos");
-        const users = await User.find({});
-        var existe = false;
-        var type = '';
-        Object.keys(users).forEach(i => {
-            const user = users[i]
-            if(user.TipoDocumento == data.TipoDocumento && user.Documento == data.Documento){
-                existe = true;
-                type = user.Tipo;
-            }
-        });
-        if(existe){
+        const users = await User.find({TipoDocumento: data.TipoDocumento, Documento: data.Documento});
+        
+        if(users[0] != undefined){
             const msg = {
                 isRegistered: true,
-                status: type
+                status: users[0].Tipo
             }
             return msg;
         }

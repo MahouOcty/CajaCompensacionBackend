@@ -19,7 +19,7 @@ const UsersController = {
     create: async (req: Request, res: Response) => {
         
         try{
-            checkKeys(["Nombres", "Apellidos", "TipoDocumento", "Documento", "SalarioMensual", "Tipo"], req.body)
+            checkKeys(["Nombres", "Apellidos", "TipoDocumento", "Documento", "SalarioMensual"], req.body)
             const user = req.body;
             res.status(201).send(await UsersService.create(user));
         } catch (error) {
@@ -34,7 +34,7 @@ const UsersController = {
     update: async (req: Request, res: Response) => {
         
         try{
-            checkKeys(["id"], req.body)
+            checkKeys(["TipoDocumento", "Documento"], req.body)
             const user = req.body;
             res.status(201).send(await UsersService.update(user));
         } catch (error) {
@@ -48,9 +48,9 @@ const UsersController = {
 
     delete: async (req: Request, res: Response) => {
         try{
-            checkKeys(["id"], req.body)
-            const id = req.body.id;
-            res.status(201).send(await UsersService.delete(id));
+            checkKeys(["TipoDocumento", "Documento"], req.body)
+            const data = req.body;
+            res.status(201).send(await UsersService.delete(data));
         } catch (error) {
             console.log(error.stack && error.stack || error);
             res.status(500).send({

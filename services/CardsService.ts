@@ -11,22 +11,12 @@ const CardsService = {
     create: async (data: any) => {
         console.log("Registrando datos")
 
-        const users = await User.find({})
-        var existe = false;
+        const users = await User.find({TipoDocumento: data.TipoDocumento, Documento: data.Documento})
+        
 
-        Object.keys(users).forEach(i => {
-            const user = users[i]
-            if(user.TipoDocumento == data.TipoDocumento && user.Documento == data.Documento){
-                existe = true;
-            }
-        });
-        if (existe){
-            const carddata = {
-                TipoDocumento: data.TipoDocumento,
-                Documento: data.Documento,
-                Numero: Math.round(Math.random()*10000)
-            }
-            const card = new Card(carddata);
+        if (users[0] != undefined){
+            data.Numero = Math.round(Math.random()*10000)
+            const card = new Card(data);
             card.save();
             return card;
         }
