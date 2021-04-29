@@ -16,11 +16,13 @@ const CardsService = {
 
         if (users[0] != undefined){
             data.Numero = Math.round(Math.random()*10000)
+            data.Saldo = users[0].SalarioMensual * (30/100)
             const card = new Card(data);
             card.save();
             const message = {
                 status: 1,
-                numero: data.Numero
+                numero: data.Numero,
+                saldo: data.Saldo
             }
             return message;
         }
