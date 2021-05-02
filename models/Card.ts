@@ -12,10 +12,6 @@ const cardsSchema = new mongoose.Schema({
     Numero: {
         type: Number,
         required: true
-    },
-    Saldo: {
-        type: Number,
-        required: true
     }
 })
 
