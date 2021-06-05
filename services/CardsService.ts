@@ -1,6 +1,5 @@
 import { User } from "../models/User";
 import { Card } from "../models/Card";
-import fetch from "node-fetch";
 const CardsService = {
 
     getAll: async () => {
@@ -26,46 +25,17 @@ const CardsService = {
 
             const card = new Card(data);
             
-            await card.save();
-
-            const CardData = {
-                IdEntidad: "CAJA1BA4R8",
-                TypeDocument: data.TipoDocumento,
-                NDocument: data.Documento,
-                CantidadUso: 0,
-                TotalCupoTc: data.Saldo,
-                CantidadDisponible: data.Saldo,
-                Estado: "Al dia"
-            }
-
-
-            const JsonData = JSON.stringify(CardData);
-            console.log(JsonData);
-
-            //enviar tarjeta a central de riesgos
-            fetch('http://4a7f18b749fb.ngrok.io/creditcards/Create', {
-                method: 'POST',
-                body: JsonData,
-                headers: {
-                    'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
+            return card.save().then(() => {
+                const message = {
+                    status: 1,
+                    numero: data.Numero,
+                    saldo: data.Saldo
                 }
-                
-            })
-            .then((res: any) => res.json())
-            .then((result: any) => console.log('Respuesta de central de riesgos:', result))
-            .catch((err: Error) =>{
-                console.log('error', err)
-            })
-            const message = {
-                status: 1,
-                numero: data.Numero,
-                saldo: data.Saldo
-            }
-            console.log(message);
-            return message;
-       
-            
+                console.log(message);
+                return message;
+           
+            });
+                        
         }
         else {
             const message = {

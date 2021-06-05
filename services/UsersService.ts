@@ -15,7 +15,6 @@ const UsersService = {
         const salarioMinimo = 908526;
 
         const users = await User.find({TipoDocumento: userdata.TipoDocumento, Documento: userdata.Documento});
-        var existe = false;
 
         if (users[0] == undefined){
             if(salario < 2*salarioMinimo){

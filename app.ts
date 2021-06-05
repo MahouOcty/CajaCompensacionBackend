@@ -6,7 +6,7 @@ dotenv.config()
 const app = express();
 
 
-mongoose.connect('mongodb://localhost:27017/cajas', {
+mongoose.connect('mongodb+srv://mahoakashi:oX1E6YB2YFof48rO@caja-compensacion.rvx3e.mongodb.net/cajas?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }, () => {
